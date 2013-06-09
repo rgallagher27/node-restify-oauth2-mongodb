@@ -1,13 +1,21 @@
 {
     "name": "testing-oauth",
-    "description": "A simple OAuth 2 test for Restify",
+    "description": "A simple OAuth 2 test for Restify and mongoos",
     "keywords": ["restify", "oauth", "oauth2", "rest", "authentication", "api"],
     "version": "0.0.1",
     "author": "Ross Gallagher",
     "main": "server.js",
-    "dependencies": {
-        "restify" : "latest",
-        "restify-oauth2" : "2.x",
-        "underscore": "1.x"
+    "engines": 
+    {
+        "node": "0.10.x",
+        "npm": "1.2.x"
+    }, 
+    "dependencies": 
+    {
+        "restify" : "2.5.x"
+        , "restify-oauth2" : "2.x"
+        , "underscore": "1.x"
+        , "mongoose": "3.6.x"
+        , "bcrypt" : "0.7.5"
     }
 }
