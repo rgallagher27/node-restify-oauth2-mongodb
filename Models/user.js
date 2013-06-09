@@ -51,11 +51,11 @@ var validatePresenceOf = function (value) {
  * Pre-save hook
  */
 UserSchema.pre('save', function(next) {
-  if (!validatePresenceOf(this.username)) {
-    next(new restify.MissingParameterError('Username cannot be blank'));
-  }
   if (!validatePresenceOf(this.name)) {
     next(new restify.MissingParameterError('Name cannot be blank'));
+  }
+  if (!validatePresenceOf(this.username)) {
+    next(new restify.MissingParameterError('Username cannot be blank'));
   }
   if (!validatePresenceOf(this.role)) {
     next(new restify.MissingParameterError('Role cannot be blank'));

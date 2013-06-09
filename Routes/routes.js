@@ -1,5 +1,8 @@
+
+var mongoose    	= require('mongoose');
 var restify 		= require('restify');
 var restifyOAuth2   = require("restify-oauth2");
+var User       		= mongoose.model('User');
 
 function validateUser(req, res){
 	if (!req.username) {
@@ -28,10 +31,11 @@ module.exports = function (server, config)
 
    	// Define entry points
 	var RESOURCES = Object.freeze({
-	    INITIAL: "/",
-	    TOKEN: "/token",
-	    PUBLIC: "/public",
-	    SECRET: "/secret"
+	    INITIAL		: "/",
+	    REGISTER 	: "/register",
+	    TOKEN 		: "/token",
+	    PUBLIC 		: "/public",
+	    SECRET 		: "/secret"
 	});
 
    	server.get(RESOURCES.INITIAL, function (req, res) {
@@ -54,6 +58,24 @@ module.exports = function (server, config)
 
 	    res.contentType = "application/hal+json";
 	    res.send(response);
+	});
+
+	server.post(RESOURCES.REGISTER, function (req, res, next) {
+		if (req.params.password != req.params.vPassword) {
+			return next(new restify.MissingParameterError('Password and Verify Password must match.'));
+		}
+		var user = new User(req.params);
+		if (user.username != null && user.username != '') {
+			user.save(function (err, user) {
+				if (!err) {
+					res.send(user);
+				} else {
+					return next(err);
+				}
+			});
+		} else {
+			return next(new restify.MissingParameterError('Username required.'));
+		}
 	});
 
 	server.get(RESOURCES.PUBLIC, function (req, res) {
