@@ -17,10 +17,10 @@ module.exports = function (server, config)
    	server.pre(function(req, res, next) 
  	{
     	if (req.url === '/') {
-         	return next();
+         	
       	}
       	else if (req.url === '/public') {
-         	return next();
+         	
       	}
       	else if (req.url === '/token') {
          	return next();
@@ -38,7 +38,8 @@ module.exports = function (server, config)
 	    SECRET 		: "/secret"
 	});
 
-   	server.get(RESOURCES.INITIAL, function (req, res) {
+   	server.get(RESOURCES.INITIAL, function (req, res) 
+   	{
 	    var response = {
 	        _links: {
 	            self: { href: RESOURCES.INITIAL },
@@ -60,11 +61,20 @@ module.exports = function (server, config)
 	    res.send(response);
 	});
 
-	server.post(RESOURCES.REGISTER, function (req, res, next) {
-		if (req.params.password != req.params.vPassword) {
+	server.post(RESOURCES.REGISTER, function (req, res, next) 
+	{
+		/*
+		 * Should be using req.params here, but problems ocurring !
+		 */
+		console.log(req.body.password);
+		if (req.body.password != req.body.vPassword) {
 			return next(new restify.MissingParameterError('Password and Verify Password must match.'));
 		}
-		var user = new User(req.params);
+		
+		/*
+		 * Should be using req.params here, but problems ocurring !
+		 */
+		var user = new User(req.body);
 		if (user.username != null && user.username != '') {
 			user.save(function (err, user) {
 				if (!err) {
@@ -78,7 +88,8 @@ module.exports = function (server, config)
 		}
 	});
 
-	server.get(RESOURCES.PUBLIC, function (req, res) {
+	server.get(RESOURCES.PUBLIC, function (req, res) 
+	{
 	    res.send({
 	        "public resource": "is public",
 	        "it's not even": "a linked HAL resource",
@@ -87,7 +98,8 @@ module.exports = function (server, config)
 	    });
 	});
 
-	server.get(RESOURCES.SECRET, function (req, res) {
+	server.get(RESOURCES.SECRET, function (req, res) 
+	{
 		validateUser(req, res);
 	    res.send({'message':'Success'});
 	});
