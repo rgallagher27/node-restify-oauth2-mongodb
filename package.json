@@ -1,0 +1,13 @@
+{
+    "name": "testing-oauth",
+    "description": "A simple OAuth 2 test for Restify",
+    "keywords": ["restify", "oauth", "oauth2", "rest", "authentication", "api"],
+    "version": "0.0.1",
+    "author": "Ross Gallagher",
+    "main": "server.js",
+    "dependencies": {
+        "restify" : "latest",
+        "restify-oauth2" : "2.x",
+        "underscore": "1.x"
+    }
+}
