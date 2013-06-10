@@ -3,23 +3,32 @@
  * Module dependencies.
  */
 var mongoose    = require('mongoose');
+var validate    = require('mongoose-validator').validate;
 var bcrypt      = require('bcrypt');
 var restify     = require('restify');
 var Schema      = mongoose.Schema;
 var ObjectId    = Schema.ObjectId;
 
 /**
+ * Vaidation Rules
+ */
+var nameValidator   = [validate('len', 3, 50), validate('isAlphanumeric')];
+var userValidator   = [validate('len', 3, 25), validate('isAlphanumeric'), validate('notEmpty')];
+var emailValidator  = [validate('isEmail')];
+var passValidator   = [validate('len', 8, 50)];
+
+/**
  * User Schema
  */
 var UserSchema = new Schema({
     id:                 ObjectId,
-    name:               { type: String, trim: true },
-    email:              { type: String, trim: true },
+    name:               { type: String, trim: true, required: true, validate: nameValidator },
+    email:              { type: String, trim: true, required: true, validate: emailValidator },
+    username:           { type: String, trim: true, required: true, validate: userValidator, lowercase: true },
+    hashed_password:    { type: String, trim: true, required: true, validate: passValidator },
     newEmail:           { type: String, trim: true, default: '' },
     emailValidatedFlag: { type: Boolean, default: false },
-    username:           { type: String, trim: true },
     role:               { type: String, enum: ['User', 'Subscriber', 'Admin'], default: 'User' },
-    hashed_password:    { type: String, trim: true },
     tempPasswordFlag:   { type: Boolean, default: false }
 })
 
