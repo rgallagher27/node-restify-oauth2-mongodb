@@ -19,18 +19,6 @@ redisClient.on("error", function (err) {
     console.log("Error " + err);
 });
 
-var database = {
-    clients: {
-        officialApiClient: { secret: "C0FFEE" },
-        unofficialClient: { secret: "DECAF" }
-    },
-    users: {
-        AzureDiamond: { password: "hunter2" },
-        Cthon98: { password: "*********" }
-    },
-    tokensToUsernames: {}
-};
-
 function generateToken(data) 
 {
     var random = Math.floor(Math.random() * 100001);
