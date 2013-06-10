@@ -12,8 +12,12 @@ var env     = process.env.NODE_ENV || 'development';
 var config  = require('./config')[env];
 
 // Connect Redis connection
-var redis           = require('redis');
-var redisClient     = redis.createClient(null, config.redis_url, null);
+if( env === "development" ) {
+    var redis           = require('redis');
+    var redisClient     = redis.createClient(null, config.redis_url, null);
+}else {
+    var redisClient = require('redis-url').connect(config.redis_url);
+}
 
 redisClient.on("error", function (err) {
     console.log("Error " + err);

@@ -14,14 +14,6 @@ var models_path = config.root + '/Models'
 var config_path = config.root + '/Configs'
 var routes_path = config.root + '/Routes' 
 
-// Connect Redis connection
-var redis       = require('redis');
-var client      = redis.createClient(null, config.redis_url, null);
-
-client.on("error", function (err) {
-    console.log("Error " + err);
-});
-
 // Connect to MongoDB
 mongoose.connect(config.db_url);
 var db = mongoose.connection;
