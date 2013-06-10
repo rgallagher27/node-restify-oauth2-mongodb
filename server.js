@@ -14,6 +14,14 @@ var models_path = config.root + '/Models'
 var config_path = config.root + '/Configs'
 var routes_path = config.root + '/Routes' 
 
+// Connect Redis connection
+var redis       = require('redis');
+var client      = redis.createClient(null, config.redis_url, null);
+
+client.on("error", function (err) {
+    console.log("Error " + err);
+});
+
 // Connect to MongoDB
 mongoose.connect(config.db_url);
 var db = mongoose.connection;
@@ -28,29 +36,6 @@ fs.readdirSync(models_path).forEach(function (file) {
   console.log("Loading model " + file);
   require(models_path + '/' +file);
 });
-
-/*
- * Create a new Client
- *
-
-var Client          = mongoose.model('ClientKey')
-var newClient       = new Client({client: "test", secret: "pass"});
-newClient.save();
- */
-
- /*
- * Create a new User
- *
-
-var User            = mongoose.model('User')
-var newUser         = new User({name: "Ross Gallagher", 
-                                email: "ross_gallagher@rossgallagher.co.uk",
-                                username: "rgallagher",
-                                role : "Admin",
-                                password : "my2244668800" 
-                            });
-newUser.save();
-*/
 
 // Load hooks after models have been loaded
 var hooks = require("./Configs/hooks");

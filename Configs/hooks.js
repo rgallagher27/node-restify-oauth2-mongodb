@@ -7,6 +7,18 @@ var Client      = mongoose.model('ClientKey');
 var Token       = mongoose.model('AuthToken');
 var User        = mongoose.model('User');
 
+// Load configurations
+var env     = process.env.NODE_ENV || 'development';
+var config  = require('./config')[env];
+
+// Connect Redis connection
+var redis           = require('redis');
+var redisClient     = redis.createClient(null, config.redis_url, null);
+
+redisClient.on("error", function (err) {
+    console.log("Error " + err);
+});
+
 var database = {
     clients: {
         officialApiClient: { secret: "C0FFEE" },
@@ -63,6 +75,9 @@ exports.grantUserToken = function (username, password, cb)
             var newToken    = new Token({ username: username, token: token });
             newToken.save();
 
+            // Store the token in the Redis datastore so we can perform fast queries on it
+            redisClient.set(token, username);
+
             // Call back with the token so Restify-OAuth2 can pass it on to the client.
             return cb(null, token);
         } else {
@@ -73,17 +88,28 @@ exports.grantUserToken = function (username, password, cb)
 
 exports.authenticateToken = function (token, cb) 
 {
-    Token.findOne({ token: token }, function (err, authToken) {
-        if(err){
-            cb(null, false);
-        }else {
-            if( authToken === null ) {
-                cb(null, false);
-            } else {
-                // If the token authenticates, call back with the corresponding username. Restify-OAuth2 will put it in the
-                // request's `username` property.
-                return cb(null, authToken.username);
-            }
+    // Query the Redis store for the Auth Token 
+    redisClient.get(token, function (err, reply) {
+        console.log("Redis reply " + reply); // Will print `OK`
+
+        // If we get an error fall back to the MongoDb
+        if(err || reply === null){
+            Token.findOne({ token: token }, function (err, authToken) {
+                if(err){
+                    cb(null, false);
+                }else {
+                    if( authToken === null ) {
+                        cb(null, false);
+                    } else {
+                        // If the token authenticates, call back with the corresponding username. Restify-OAuth2 will put it in the
+                        // request's `username` property.
+                        return cb(null, authToken.username);
+                    }
+                }
+            });
+        } else {
+            // Return the username
+            return cb(null, reply);
         }
     });
 };
