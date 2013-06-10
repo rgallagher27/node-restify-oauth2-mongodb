@@ -1,5 +1,8 @@
 "use strict";
 
+/*
+ * Main Imports
+ */
 var restify         = require("restify");
 var restifyOAuth2   = require("restify-oauth2");
 var mongoose        = require('mongoose');
@@ -57,3 +60,5 @@ require(routes_path + '/routes')(server, config);
 
 var port = config.port;
     server.listen(port);
+
+module.exports = server;
