@@ -14,6 +14,7 @@
     {
         "restify" : "2.5.x"
         , "restify-oauth2" : "2.x"
+        , "cluster" : "0.7.7"
         , "underscore": "1.x"
         , "mongoose": "3.6.x"
         , "bcrypt" : "0.7.5"
