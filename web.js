@@ -3,12 +3,14 @@
 /*
  * Cluster Imports
  */
-var cluster = require('cluster');
-var http = require('http');
-var numCPUs = require('os').cpus().length;
+var cluster 	= require('cluster');
+var http 		= require('http');
+var numCPUs 	= require('os').cpus().length;
 
 if (cluster.isMaster) {
-  // Fork workers.
+  /*
+   * Fork workers.
+   */
   for (var i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
@@ -17,7 +19,8 @@ if (cluster.isMaster) {
     console.log('worker ' + worker.process.pid + ' died');
   });
 } else {
-
+	/*
+	 * Start a new server on a new thread
+	 */
 	require('./server.js')
-
 }

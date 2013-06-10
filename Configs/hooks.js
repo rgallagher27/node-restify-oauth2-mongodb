@@ -25,9 +25,9 @@ redisClient.on("error", function (err) {
 
 function generateToken(data) 
 {
-    var random = Math.floor(Math.random() * 100001);
-    var timestamp = (new Date()).getTime();
-    var sha256 = crypto.createHmac("sha256", random + "WOO" + timestamp);
+    var random          = Math.floor(Math.random() * 100001);
+    var timestamp       = (new Date()).getTime();
+    var sha256          = crypto.createHmac("sha256", random + "WOO" + timestamp);
 
     return sha256.update(data).digest("base64");
 }
