@@ -26,9 +26,9 @@ var UserSchema = new Schema({
     email:              { type: String, trim: true, required: true, validate: emailValidator },
     username:           { type: String, trim: true, required: true, validate: userValidator, lowercase: true },
     hashed_password:    { type: String, trim: true, required: true, validate: passValidator },
+    role:               { type: String, trim: true, required: true, enum: ['User', 'Developer', 'Admin'], default: 'User' },
     newEmail:           { type: String, trim: true, default: '' },
     emailValidatedFlag: { type: Boolean, default: false },
-    role:               { type: String, enum: ['User', 'Subscriber', 'Admin'], default: 'User' },
     tempPasswordFlag:   { type: Boolean, default: false }
 })
 
@@ -126,8 +126,8 @@ UserSchema.methods = {
    */
    allowAccess: function(role) {
       if (this.role == 'Admin') return true; // Admin can access everything
-      if (role == 'Subscriber' && this.role == 'Subscriber') return true; // Subscriber can access Subscriber and User
-      if (role == 'User' && (this.role == 'User' || this.role == 'Subscriber')) return true; // user is at the bottom of special access
+      if (role == 'Developer' && this.role == 'Developer') return true; // Developer can access Developer and User
+      if (role == 'User' && (this.role == 'User' || this.role == 'Developer')) return true; // user is at the bottom of special access
       return false; // should only happen if checking access for an anonymous user
    }
 }

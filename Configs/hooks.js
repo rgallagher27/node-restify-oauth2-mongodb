@@ -36,7 +36,6 @@ exports.validateClient = function (clientId, clientSecret, cb)
 {
     // Call back with `true` to signal that the client is valid, and `false` otherwise.
     // Call back with an error if you encounter an internal server error situation while trying to validate.
-
     Client.findOne({ client: clientId, secret: clientSecret }, function (err, client) {
         if(err){
             cb(null, false);
@@ -82,9 +81,11 @@ exports.authenticateToken = function (token, cb)
 {
     // Query the Redis store for the Auth Token 
     redisClient.get(token, function (err, reply) {
-        console.log("Redis reply " + reply); // Will print `OK`
-
-        // If we get an error fall back to the MongoDb
+        console.log("Redis reply " + reply);
+        /* 
+         * If we get an error fall back to the MongoDb incase
+         * Redis has deleted the token
+         */
         if(err || reply === null){
             Token.findOne({ token: token }, function (err, authToken) {
                 if(err){

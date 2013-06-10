@@ -12,7 +12,8 @@ function validateUser(req, res){
 
 module.exports = function (server, config) 
 {
-   	var config_path = config.root + '/config'
+   	var config_path = config.root + '/Configs';
+   	var routes_path = config.root + '/Routes'
 
    	server.pre(function(req, res, next) 
  	{
@@ -70,7 +71,7 @@ module.exports = function (server, config)
 		if (req.body.password != req.body.vPassword) {
 			return next(new restify.MissingParameterError('Password and Verify Password must match.'));
 		}
-		
+
 		/*
 		 * Should be using req.params here, but problems ocurring !
 		 */
@@ -103,4 +104,7 @@ module.exports = function (server, config)
 		validateUser(req, res);
 	    res.send({'message':'Success'});
 	});
+
+
+	require(routes_path + '/routes-user.js')(server, config);
 }
