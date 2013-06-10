@@ -17,5 +17,7 @@
         , "underscore": "1.x"
         , "mongoose": "3.6.x"
         , "bcrypt" : "0.7.5"
+        , "mongoose-validator" : "0.2.x"
+        , "redis" : "0.8.x"
     }
 }
