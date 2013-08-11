@@ -1,8 +1,8 @@
 {
-    "name": "testing-oauth",
+    "name": "restify-oauth2-mongoDB",
     "description": "A simple OAuth 2 test for Restify and mongoos",
     "keywords": ["restify", "oauth", "oauth2", "rest", "authentication", "api"],
-    "version": "0.0.1",
+    "version": "0.0.5",
     "author": "Ross Gallagher",
     "main": "server.js",
     "engines": 

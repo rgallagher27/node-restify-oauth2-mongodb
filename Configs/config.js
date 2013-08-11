@@ -5,7 +5,7 @@ module.exports = {
     development: {
       root: require('path').normalize(__dirname + '/..'),
       app: {
-        name: 'Nodejs Restify Oauth Mongoose Demo'
+        name: 'restify-oauth2-mongoDB'
       },
 	    host: 'localhost',
 	    port: '8090',
@@ -25,9 +25,9 @@ module.exports = {
     test: {
       root: require('path').normalize(__dirname + '/..'),
       app: {
-        name: 'Nodejs Restify Oauth Mongoose Demo'
+        name: 'restify-oauth2-mongoDB'
       },
-      host: 'http://enigmatic-anchorage-1633.herokuapp.com',
+      host: 'http://yourapp.herokuapp.com',
       port: process.env.PORT,
       db_url: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL,
       redis_url: process.env.REDISTOGO_URL,
