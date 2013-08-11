@@ -10,26 +10,15 @@ var Schema      = mongoose.Schema;
 var ObjectId    = Schema.ObjectId;
 
 /**
- * Vaidation Rules
- */
-var nameValidator   = [validate('len', 3, 50), validate('isAlphanumeric')];
-var userValidator   = [validate('len', 3, 25), validate('isAlphanumeric'), validate('notEmpty')];
-var emailValidator  = [validate('isEmail')];
-var passValidator   = [validate('len', 8, 50)];
-
-/**
  * User Schema
  */
 var UserSchema = new Schema({
     id:                 ObjectId,
-    name:               { type: String, trim: true, required: true, validate: nameValidator },
-    email:              { type: String, trim: true, required: true, validate: emailValidator },
-    username:           { type: String, trim: true, required: true, validate: userValidator, lowercase: true },
-    hashed_password:    { type: String, trim: true, required: true, validate: passValidator },
-    role:               { type: String, trim: true, required: true, enum: ['User', 'Developer', 'Admin'], default: 'User' },
-    newEmail:           { type: String, trim: true, default: '' },
-    emailValidatedFlag: { type: Boolean, default: false },
-    tempPasswordFlag:   { type: Boolean, default: false }
+    name:               { type: String, trim: true, required: true },
+    email:              { type: String, trim: true, required: true },
+    username:           { type: String, trim: true, required: true, lowercase: true },
+    hashed_password:    { type: String, trim: true, required: true },
+    role:               { type: String, trim: true, required: true, enum: ['User', 'Developer', 'Admin'], default: 'User' }
 })
 
 
