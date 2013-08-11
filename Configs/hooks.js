@@ -94,7 +94,8 @@ exports.authenticateToken = function (token, cb)
                     if( authToken === null ) {
                         cb(null, false);
                     } else {
-                        // If the token authenticates, call back with the corresponding username. Restify-OAuth2 will put it in the
+                        // If the token authenticates, call back with the corresponding username. 
+                        // Restify-OAuth2 will put it in the
                         // request's `username` property.
                         return cb(null, authToken.username);
                     }

@@ -64,17 +64,10 @@ module.exports = function (server, config)
 
 	server.post(RESOURCES.REGISTER, function (req, res, next) 
 	{
-		/*
-		 * Should be using req.params here, but problems ocurring !
-		 */
-		console.log(req.body.password);
 		if (req.body.password != req.body.vPassword) {
 			return next(new restify.MissingParameterError('Password and Verify Password must match.'));
 		}
 
-		/*
-		 * Should be using req.params here, but problems ocurring !
-		 */
 		var user = new User(req.body);
 		if (user.username != null && user.username != '') {
 			user.save(function (err, user) {
