@@ -6,7 +6,7 @@ A simple implementation of a Node.js REST API built with Restify, using restify-
 Installation
 ------------
 
-- Install [redis](http://redis.io/), [node.js](http://nodejs.org/) and [npm](http://npmjs.org/).
+- Install [redis](http://redis.io/), [MongoDB](http://www.mongodb.org/), [node.js](http://nodejs.org/) and [npm](http://npmjs.org/).
 - Clone the repository to your computer.
 - Install dependancies: `npm install`
 - Start redis: `redis-server`
