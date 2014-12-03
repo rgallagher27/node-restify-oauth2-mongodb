@@ -28,45 +28,59 @@ module.exports = function makeErrorSenders(grantTypes) {
         res.header("WWW-Authenticate", "Bearer realm=\"" + options.wwwAuthenticateRealm + "\"");
     }
 
-    function sendWithHeaders(res, options, error) {
+    function sendWithHeaders(res, next, options, error) {
         if (error.statusCode in statusCodesToErrorCodes) {
             setLinkHeader(res, options);
             setWwwAuthenticateHeader(res, options, error);
         }
-        res.send(error);
+        next(error);
     }
 
-    function sendAuthorizationRequired(res, options, error) {
+    function sendAuthenticationRequired(res, next, options, error) {
         setLinkHeader(res, options);
         setWwwAuthenticateHeaderWithoutErrorInfo(res, options);
-        res.send(error);
+        next(error);
+    }
+
+    function sendInsufficientAuthorization(res, next, options, error) {
+        setLinkHeader(res, options);
+        next(error);
     }
 
     return {
         sendWithHeaders: sendWithHeaders,
 
-        tokenRequired: function (res, options, message) {
+        tokenRequired: function (res, next, options, message) {
             if (message === undefined) {
                 message = "Bearer token required. Follow the oauth2-token link to get one!";
             }
 
-            sendWithHeaders(res, options, new restify.BadRequestError(message));
+            sendWithHeaders(res, next, options, new restify.BadRequestError(message));
         },
 
-        authorizationRequired: function (res, options, message) {
+        authenticationRequired: function (res, next, options, message) {
             if (message === undefined) {
-                message = "Authorization via bearer token required. Follow the oauth2-token link to get one!";
+                message = "Authentication via bearer token required. Follow the oauth2-token link to get one!";
             }
 
-            sendAuthorizationRequired(res, options, new restify.UnauthorizedError(message));
+            sendAuthenticationRequired(res, next, options, new restify.UnauthorizedError(message));
         },
 
-        tokenInvalid: function (res, options, message) {
+        insufficientAuthorization: function (res, next, options, message) {
+            if (message === undefined) {
+                message = "Insufficient authorization. Follow the oauth2-token link to get a token with more " +
+                          "authorization!";
+            }
+
+            sendInsufficientAuthorization(res, next, options, new restify.ForbiddenError(message));
+        },
+
+        tokenInvalid: function (res, next, options, message) {
             if (message === undefined) {
                 message = "Bearer token invalid. Follow the oauth2-token link to get a valid one!";
             }
 
-            sendWithHeaders(res, options, new restify.UnauthorizedError(message));
+            sendWithHeaders(res, next, options, new restify.UnauthorizedError(message));
         }
     };
 };
