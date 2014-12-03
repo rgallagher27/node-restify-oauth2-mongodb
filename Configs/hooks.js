@@ -32,11 +32,11 @@ function generateToken(data)
     return sha256.update(data).digest("base64");
 }
 
-exports.validateClient = function (clientId, clientSecret, cb) 
+exports.validateClient = function (clientCredentials, req, cb)
 {
     // Call back with `true` to signal that the client is valid, and `false` otherwise.
     // Call back with an error if you encounter an internal server error situation while trying to validate.
-    Client.findOne({ client: clientId, secret: clientSecret }, function (err, client) {
+    Client.findOne({ client: clientCredentials.clientId, secret: clientCredentials.clientSecret }, function (err, client) {
         if(err){
             cb(null, false);
         }else {
@@ -49,25 +49,25 @@ exports.validateClient = function (clientId, clientSecret, cb)
     });
 };
 
-exports.grantUserToken = function (username, password, cb) 
+exports.grantUserToken = function (allCredentials, req, cb)
 {
-    var query = User.where( 'username', new RegExp('^' + username + '$', 'i') );
+    var query = User.where( 'username', new RegExp('^' + allCredentials.username + '$', 'i') );
 
     query.findOne(function (err, user) {
         if (err) {
             cb(null, false);
         } else if (!user) {
             cb(null, false);
-        } else if (user.authenticate(password)) {
+        } else if (user.authenticate(allCredentials.password)) {
             // If the user authenticates, generate a token for them and store it to the database so
             // we can look it up later.
 
-            var token       = generateToken(username + ":" + password);
-            var newToken    = new Token({ username: username, token: token });
+            var token       = generateToken(allCredentials.username + ":" + allCredentials.password);
+            var newToken    = new Token({ username: allCredentials.username, token: token });
             newToken.save();
 
             // Store the token in the Redis datastore so we can perform fast queries on it
-            redisClient.set(token, username);
+            redisClient.set(token, allCredentials.username);
 
             // Call back with the token so Restify-OAuth2 can pass it on to the client.
             return cb(null, token);
@@ -77,7 +77,7 @@ exports.grantUserToken = function (username, password, cb)
     });
 };
 
-exports.authenticateToken = function (token, cb) 
+exports.authenticateToken = function (token, req, cb)
 {
     // Query the Redis store for the Auth Token 
     redisClient.get(token, function (err, reply) {

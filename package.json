@@ -12,14 +12,14 @@
     }, 
     "dependencies": 
     {
-        "restify" : "2.5.x"
-        , "restify-oauth2" : "2.x"
+        "restify" : "2.8.x"
+        , "restify-oauth2" : "4.x"
         , "cluster" : "0.7.7"
         , "underscore": "1.x"
-        , "mongoose": "3.6.x"
-        , "bcrypt" : "0.7.5"
-        , "mongoose-validator" : "0.2.x"
-        , "redis" : "0.8.x"
-        , "redis-url" : "0.1.0"
+        , "mongoose": "3.8.x"
+        , "bcrypt" : "0.8.x"
+        , "mongoose-validator" : "1.0.x"
+        , "redis" : "0.12.x"
+        , "redis-url" : "0.2.0"
     }
 }
