@@ -11,7 +11,7 @@ Installation
 - Install dependancies: `npm install`
 - Start redis: `redis-server`
 - Start MongoDB: `mongod`
-- Insert a Client Key into the mongoDB wit the format: 
+- Insert a Client Key into the mongoDB with the format: 
 
 ```JSON
 {
